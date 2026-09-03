@@ -30,12 +30,12 @@
   <Project Path="Mirror.Transports.csproj" />
   <Project Path="EncryptionTransportEditor.csproj" />
   <Project Path="Unity.Multiplayer.Center.Common.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="com.rlabrecque.steamworks.net.editor.csproj" />
   <Project Path="Telepathy.csproj" />
   <Project Path="UnityEditor.UI.Analytics.csproj" />
   <Project Path="ParrelSync.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
-  <Project Path="Assembly-CSharp.csproj" />
   <Project Path="Unity.RenderPipeline.Universal.ShaderLibrary.csproj" />
   <Project Path="Mirror.CompilerSymbols.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.Shaders.csproj" />

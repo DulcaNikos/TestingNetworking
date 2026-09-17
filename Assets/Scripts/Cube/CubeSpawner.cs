@@ -9,6 +9,9 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class CubeSpawner : NetworkBehaviour
 {
+    [SerializeField, Tooltip("Must be in Registered Spawnable Prefabs.")]
+    private GameObject _CubePrefab;
+
     [SerializeField, Tooltip("If true, only the host can spawn cubes.")]
     private bool _HostOnly = false;
 
@@ -42,7 +45,7 @@ public class CubeSpawner : NetworkBehaviour
     [Command(requiresAuthority = false)]
     private void CmdSpawnCube(NetworkConnectionToClient sender = null)
     {
-        if (sender == null) return;
+        if (sender == null || _CubePrefab == null) return;
 
         // Never trust the client-side check alone
         if (_HostOnly && sender != NetworkServer.localConnection) return;
@@ -65,8 +68,7 @@ public class CubeSpawner : NetworkBehaviour
         Vector3 position = origin.position + forward * _SpawnDistance;
         position.y = _SpawnHeight;
 
-        GameObject cube = RuntimeCubeFactory.Build(position, Quaternion.LookRotation(forward, Vector3.up));
-        cube.SetActive(true);
-        NetworkServer.Spawn(cube, RuntimeCubeFactory.AssetId);
+        GameObject cube = Instantiate(_CubePrefab, position, Quaternion.LookRotation(forward, Vector3.up));
+        NetworkServer.Spawn(cube);
     }
 }

@@ -20,18 +20,6 @@ public class CustomNetworkManager : NetworkManager
 
     public List<PlayerObjectController> _GamePlayers { get; } = new List<PlayerObjectController>();
 
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        RuntimeCubeFactory.RegisterClientHandler();
-    }
-
-    public override void OnStopClient()
-    {
-        base.OnStopClient();
-        RuntimeCubeFactory.UnregisterClientHandler();
-    }
-
     public void StartGame(string _sceneName)
     {
         ServerChangeScene(_sceneName);

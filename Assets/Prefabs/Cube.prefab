@@ -164,7 +164,7 @@ MonoBehaviour:
   _StepDuration: 0.25
   _TurnAngle: 90
   _TurnDuration: 0.3
-  _DestroyWhenFinished: 0
+  _DestroyWhenFinished: 1
   _DestroyDelay: 2
 --- !u!114 &4692469904975097470
 MonoBehaviour:

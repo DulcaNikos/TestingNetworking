@@ -34,6 +34,7 @@ public class PlayerObjectController : NetworkBehaviour
     {
         CmdSetPlayerName(SteamFriends.GetPersonaName().ToString());
         gameObject.name = "LocalGamePlayer";
+        if (LobbyController.Instance == null) return;
         LobbyController.Instance.FindLocalPlayer();
         LobbyController.Instance.UpdateLobbyName();
 
@@ -42,6 +43,7 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStartClient()
     {
         Manager._GamePlayers.Add(this);
+        if (LobbyController.Instance == null) return;
         LobbyController.Instance.UpdateLobbyName();
         LobbyController.Instance.UpdatePlayerList();
     }
@@ -49,6 +51,7 @@ public class PlayerObjectController : NetworkBehaviour
     public override void OnStopClient()
     {
         Manager._GamePlayers.Remove(this);
+        if (LobbyController.Instance == null) return;
         LobbyController.Instance.UpdatePlayerList();
     }
 

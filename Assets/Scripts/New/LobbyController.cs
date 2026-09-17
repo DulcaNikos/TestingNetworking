@@ -57,6 +57,14 @@ public class LobbyController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
     public void UpdateLobbyName()
     {
         _CurrentLobbyID = Manager.GetComponent<SteamLobby>().CurrentLobbyID;

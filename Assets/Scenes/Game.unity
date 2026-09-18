@@ -170,6 +170,12 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _CubePrefab: {fileID: 2908540259006838717, guid: 4911425f7f3dd9348ba724e7c5acabab, type: 3}
+  _CubeReference:
+    m_AssetGUID: 4911425f7f3dd9348ba724e7c5acabab
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
   _HostOnly: 0
   _SpawnDistance: 2
   _SpawnHeight: 0.5

@@ -24,6 +24,8 @@ public class SteamLobby : MonoBehaviour
     public ulong CurrentLobbyID => _CurrentLobbyID;
     public List<CSteamID> LobbyIDs => _LobbyIDs;
 
+    private bool _IsHosting;
+
     void Awake()
     {
         if (Instance == null)
@@ -48,13 +50,19 @@ public class SteamLobby : MonoBehaviour
         _LobbyDataUpdated = Callback<LobbyDataUpdate_t>.Create(OnGetLobbyData);
     }
 
-    public void HostLobby()
+    public async void HostLobby()
     {
+        await AddressableSpawnRegistry.Instance.LoadAllAsync();
+        if (this == null) return;
+
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
     }
 
-    public void JoinLobby(CSteamID _lobbyID)
+    public async void JoinLobby(CSteamID _lobbyID)
     {
+        await AddressableSpawnRegistry.Instance.LoadAllAsync();
+        if (this == null) return;
+
         SteamMatchmaking.JoinLobby(_lobbyID);
     }
 
@@ -73,17 +81,23 @@ public class SteamLobby : MonoBehaviour
         if (_callback.m_eResult != EResult.k_EResultOK)
         {
             Debug.LogError("Failed to create lobby: " + _callback.m_eResult);
+            _IsHosting = false;
             return;
         }
 
+        _IsHosting = true;
         Debug.Log("Lobby successfully created. Lobby ID: " + _callback.m_ulSteamIDLobby);
+
         networkManager.StartHost();
         SteamMatchmaking.SetLobbyData(new CSteamID(_callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyData(new CSteamID(_callback.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName().ToString() + " 'S LOBBY");
     }
 
-    private void OnJoinRequested(GameLobbyJoinRequested_t _callback)
+    private async void OnJoinRequested(GameLobbyJoinRequested_t _callback)
     {
+        await AddressableSpawnRegistry.Instance.LoadAllAsync();
+        if (this == null) return;
+
         Debug.Log("Join request received for lobby: " + _callback.m_steamIDLobby);
         SteamMatchmaking.JoinLobby(_callback.m_steamIDLobby);
         // if (NetworkClient.isConnected || NetworkClient.active)
@@ -100,15 +114,21 @@ public class SteamLobby : MonoBehaviour
         _CurrentLobbyID = _callback.m_ulSteamIDLobby;
 
         //Clients
-        if (NetworkServer.active)
+        if (_IsHosting || NetworkServer.active)
         {
             Debug.Log("Already in a lobby as a host. Ignoring join request");
             return;
         }
 
         string hostAddress = SteamMatchmaking.GetLobbyData(new CSteamID(_callback.m_ulSteamIDLobby), HostAddressKey);
+        if (string.IsNullOrEmpty(hostAddress))
+        {
+            Debug.LogError("Host address missing from lobby data. Did the host finish setting it?");
+            return;
+        }
         networkManager.networkAddress = hostAddress;
         Debug.Log("Entered lobby: " + _callback.m_ulSteamIDLobby);
+
         networkManager.StartClient();
 
         // if (_callback.m_EChatRoomEnterResponse != (uint)EChatRoomEnterResponse.k_EChatRoomEnterResponseSuccess)

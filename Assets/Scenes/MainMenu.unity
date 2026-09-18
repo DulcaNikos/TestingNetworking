@@ -2021,6 +2021,7 @@ GameObject:
   - component: {fileID: 1578252281}
   - component: {fileID: 1578252278}
   - component: {fileID: 1578252284}
+  - component: {fileID: 1578252285}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -2060,7 +2061,6 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 3951610579278390761, guid: a7ab945a226e60c4c8565895ef74e929, type: 3}
   - {fileID: 4025511770025441647, guid: a10932a2173618e45a6b4508d5a56d6a, type: 3}
-  - {fileID: 2908540259006838717, guid: 4911425f7f3dd9348ba724e7c5acabab, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -2135,6 +2135,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959a8cb00509ba24abe90826925b1445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteamLobby
+--- !u!114 &1578252285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578252277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca1826f9706415843b7277e4a49cb474, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AddressableSpawnRegistry
+  _NetworkPrefabs:
+  - m_AssetGUID: 4911425f7f3dd9348ba724e7c5acabab
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
 --- !u!1 &1788077333
 GameObject:
   m_ObjectHideFlags: 0

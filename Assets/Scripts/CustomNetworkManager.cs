@@ -25,6 +25,20 @@ public class CustomNetworkManager : NetworkManager
         ServerChangeScene(_sceneName);
     }
 
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        //RuntimeCubeFactory.RegisterClientHandler();
+        AddressableSpawnRegistry.Instance.RegisterWithClient();
+    }
+
+    public override void OnStopClient()
+    {
+        base.OnStopClient();
+        //RuntimeCubeFactory.UnregisterClientHandler();
+        AddressableSpawnRegistry.Instance.UnregisterFromClient();
+    }
+
     //Spawn lobby player
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {

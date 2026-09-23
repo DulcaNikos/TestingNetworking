@@ -1,46 +1,22 @@
-using System.Collections;
 using Mirror;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
-/// Server-authoritative movement pattern: moves forward in steps, then turns, repeated.
-/// Position and rotation reach clients through a NetworkTransform on the same object.
+/// Host-controlled cube. Only the server reads input and moves the object.
+/// NetworkRigidbodyReliable syncs position and rotation to all clients.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class CubeMover : NetworkBehaviour
 {
-    [Header("Pattern")]
-    [SerializeField, Tooltip("Steps forward before each turn.")]
-    private int _StepsPerLeg = 5;
+    [SerializeField, Tooltip("Movement speed in units per second.")]
+    private float _MoveSpeed = 5f;
 
-    [SerializeField, Tooltip("How many times the cube turns.")]
-    private int _Turns = 5;
-
-    [SerializeField, Tooltip("Distance of one step in world units.")]
-    private float _StepSize = 1f;
-
-    [SerializeField, Tooltip("Seconds to complete one step.")]
-    private float _StepDuration = 0.25f;
-
-    [SerializeField, Tooltip("Degrees per turn. Positive = right, negative = left.")]
-    private float _TurnAngle = 90f;
-
-    [SerializeField, Tooltip("Seconds to complete one turn.")]
-    private float _TurnDuration = 0.3f;
-
-    [Header("Cleanup")]
-    [SerializeField, Tooltip("Destroy the cube for everyone when the pattern ends.")]
-    private bool _DestroyWhenFinished = true;
-
-    [SerializeField, Tooltip("Seconds to wait after finishing before destroying.")]
-    private float _DestroyDelay = 2f;
+    [SerializeField, Tooltip("Rotation speed in degrees per second.")]
+    private float _RotateSpeed = 90f;
 
     private Rigidbody _Rigidbody;
 
-    /// <summary>
-    /// Kinematic so MovePosition/MoveRotation fully control the cube
-    /// while it still pushes other non-kinematic rigidbodies.
-    /// </summary>
     private void Awake()
     {
         _Rigidbody = GetComponent<Rigidbody>();
@@ -48,9 +24,6 @@ public class CubeMover : NetworkBehaviour
         _Rigidbody.useGravity = false;
     }
 
-    /// <summary>
-    /// Smooth physics on the server; pure clients let NetworkTransform handle smoothing.
-    /// </summary>
     public override void OnStartClient()
     {
         if (!isServer)
@@ -59,70 +32,45 @@ public class CubeMover : NetworkBehaviour
         }
     }
 
-    /// <summary>
-    /// Starts the movement pattern. Runs only on the server (and host).
-    /// </summary>
     public override void OnStartServer()
     {
         _Rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        StartCoroutine(RunPattern());
-    }
-
-    [Server]
-    private IEnumerator RunPattern()
-    {
-        for (int turn = 0; turn < _Turns; turn++)
-        {
-            for (int step = 0; step < _StepsPerLeg; step++)
-            {
-                yield return MoveStep();
-            }
-            yield return Turn();
-        }
-
-        if (_DestroyWhenFinished)
-        {
-            yield return new WaitForSeconds(_DestroyDelay);
-            NetworkServer.Destroy(gameObject);
-        }
     }
 
     /// <summary>
-    /// Moves one step along the cube's current forward direction.
+    /// Only runs on the server/host. Clients never enter this.
     /// </summary>
-    [Server]
-    private IEnumerator MoveStep()
+    [ServerCallback]
+    private void FixedUpdate()
     {
-        Vector3 start = _Rigidbody.position;
-        Vector3 direction = _Rigidbody.rotation * Vector3.forward;
-        Vector3 target = start + direction * _StepSize;
-        float elapsed = 0f;
+        Keyboard kb = Keyboard.current;
+        if (kb == null) return;
 
-        while (elapsed < _StepDuration)
+        // Only active while Right Shift is held
+        if (!kb.rightShiftKey.isPressed) return;
+
+        Vector2 input = Vector2.zero;
+        if (kb.wKey.isPressed) input.y = 1f;
+        if (kb.sKey.isPressed) input.y = -1f;
+        if (kb.aKey.isPressed) input.x = -1f;
+        if (kb.dKey.isPressed) input.x = 1f;
+
+        if (input.sqrMagnitude > 0f)
         {
-            yield return new WaitForFixedUpdate();
-            elapsed += Time.fixedDeltaTime;
-            float t = Mathf.Clamp01(elapsed / _StepDuration);
-            _Rigidbody.MovePosition(Vector3.Lerp(start, target, t));
+            Vector3 move = new Vector3(input.x, 0f, input.y).normalized
+                           * _MoveSpeed * Time.fixedDeltaTime;
+            _Rigidbody.MovePosition(_Rigidbody.position + move);
         }
-    }
 
-    /// <summary>
-    /// Rotates around the Y axis by the turn angle.
-    /// </summary>
-    [Server]
-    private IEnumerator Turn()
-    {
-        Quaternion start = _Rigidbody.rotation;
-        Quaternion target = start * Quaternion.Euler(0f, _TurnAngle, 0f);
-        float elapsed = 0f;
+        // // Q / E to rotate
+        // float rotate = 0f;
+        // if (kb.qKey.isPressed) rotate = -1f;
+        // if (kb.eKey.isPressed) rotate = 1f;
 
-        while (elapsed < _TurnDuration)
-        {
-            yield return new WaitForFixedUpdate();
-            elapsed += Time.fixedDeltaTime;
-            float t = Mathf.Clamp01(elapsed / _TurnDuration);
-            _Rigidbody.MoveRotation(Quaternion.Slerp(start, target, t));
-        }
+        // if (rotate != 0f)
+        // {
+        //     Quaternion delta = Quaternion.Euler(0f, rotate * _RotateSpeed * Time.fixedDeltaTime, 0f);
+        //     _Rigidbody.MoveRotation(_Rigidbody.rotation * delta);
+        // }
     }
 }

@@ -158,14 +158,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  _StepsPerLeg: 5
-  _Turns: 5
-  _StepSize: 1
-  _StepDuration: 0.25
-  _TurnAngle: 90
-  _TurnDuration: 0.3
-  _DestroyWhenFinished: 1
-  _DestroyDelay: 2
+  _MoveSpeed: 5
+  _RotateSpeed: 90
 --- !u!114 &4692469904975097470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,7 +189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb803efbe62c34d7baece46c9ffebad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkRigidbodyReliable
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   target: {fileID: 7108159024360934338}

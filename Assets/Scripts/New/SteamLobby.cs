@@ -54,7 +54,6 @@ public class SteamLobby : MonoBehaviour
     {
         await AddressableSpawnRegistry.Instance.LoadAllAsync();
         if (this == null) return;
-
         SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypePublic, networkManager.maxConnections);
     }
 
@@ -169,4 +168,37 @@ public class SteamLobby : MonoBehaviour
         LobbiesListManager.Instance.DisplayLobbies(_LobbyIDs, _result);
     }
 
+
+    /// <summary>
+    /// Collects lobby IDs from friends currently playing this game and requests their data.
+    /// </summary>
+    public void GetFriendsLobbies()
+    {
+        if (_LobbyIDs.Count > 0)
+        {
+            _LobbyIDs.Clear();
+        }
+
+        int friendCount = SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagImmediate);
+
+        for (int i = 0; i < friendCount; i++)
+        {
+            CSteamID friendSteamID = SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagImmediate);
+
+            // Skip friends not currently in a game
+            if (!SteamFriends.GetFriendGamePlayed(friendSteamID, out FriendGameInfo_t gameInfo)) continue;
+
+            // Skip friends playing a different game
+            if (gameInfo.m_gameID.AppID() != SteamUtils.GetAppID()) continue;
+
+            // Skip if they have no lobby (playing but not in one)
+            if (!gameInfo.m_steamIDLobby.IsValid()) continue;
+
+            // Avoid duplicates if two friends are in the same lobby
+            if (_LobbyIDs.Contains(gameInfo.m_steamIDLobby)) continue;
+
+            _LobbyIDs.Add(gameInfo.m_steamIDLobby);
+            SteamMatchmaking.RequestLobbyData(gameInfo.m_steamIDLobby);
+        }
+    }
 }

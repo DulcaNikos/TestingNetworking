@@ -2022,6 +2022,7 @@ GameObject:
   - component: {fileID: 1578252278}
   - component: {fileID: 1578252284}
   - component: {fileID: 1578252285}
+  - component: {fileID: 1578252286}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -2153,6 +2154,23 @@ MonoBehaviour:
     m_SubObjectType: 
     m_SubObjectGUID: 
     m_EditorAssetChanged: 0
+  - m_AssetGUID: 466a1e18168f19c48aa74c055f1076b4
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+--- !u!114 &1578252286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578252277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dceb9a7085758fd4590419ff5b14b636, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Mirror.Components::Mirror.TeamInterestManagement
 --- !u!1 &1788077333
 GameObject:
   m_ObjectHideFlags: 0

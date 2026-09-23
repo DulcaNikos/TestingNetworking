@@ -10,6 +10,7 @@ public class PlayerObjectController : NetworkBehaviour
     [SyncVar] public ulong _PlayerSteamID;
     [SyncVar(hook = nameof(PlayerNameUpdate))] public string _PlayerName;
     [SyncVar(hook = nameof(PlayerReadyUpdate))] public bool _Ready;
+    [SyncVar(hook = nameof(OnTeamChanged))] public Team _Team = Team.None;
 
     private CustomNetworkManager _Manager;
 
@@ -113,4 +114,30 @@ public class PlayerObjectController : NetworkBehaviour
     {
         Manager.StartGame(_sceneName);
     }
+
+    #region  Team
+    private void OnTeamChanged(Team oldTeam, Team newTeam)
+    {
+        if (LobbyController.Instance == null) return;
+        LobbyController.Instance.UpdatePlayerList();
+    }
+
+    public void RequestRedTeam()
+    {
+        CmdRequestTeam(Team.Red);
+    }
+    public void RequestBlueTeam()
+    {
+        CmdRequestTeam(Team.Blue);
+    }
+
+    [Command]
+    private void CmdRequestTeam(Team team)
+    {
+        if (TeamManager.Instance.CanJoinTeam(team))
+        {
+            TeamManager.Instance.AssignPlayerToTeam(this, team);
+        }
+    }
+    #endregion
 }

@@ -11,6 +11,7 @@ public class PlayerGameController : NetworkBehaviour
     [SyncVar] public int _PlayerIdNumber;
     [SyncVar] public ulong _PlayerSteamID;
     [SyncVar] public string _PlayerName;
+    [SyncVar] public Team _Team = Team.None;
 
     [SerializeField, Tooltip("Disabled on the prefab, enabled only for the local player.")]
     private PlayerInput _PlayerInput;

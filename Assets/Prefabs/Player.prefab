@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7570747088771055443}
   - component: {fileID: 7455681258113656846}
   - component: {fileID: 6118498913272364883}
+  - component: {fileID: 5191427955362955788}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -111,7 +112,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -184,6 +185,7 @@ MonoBehaviour:
   _PlayerIdNumber: 0
   _PlayerSteamID: 0
   _PlayerName: 
+  _Team: 0
   _PlayerInput: {fileID: 8564352469432762538}
 --- !u!114 &7455681258113656846
 MonoBehaviour:
@@ -236,3 +238,20 @@ MonoBehaviour:
   rotationSensitivity: 0.01
   positionPrecision: 0.01
   scalePrecision: 0.01
+--- !u!114 &5191427955362955788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4025511770025441647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2576730625b1632468cbcbfe5e721f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkTeam
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  _teamId: None
+  forceShown: 1

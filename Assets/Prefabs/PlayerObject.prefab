@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7410568053393429635}
   - component: {fileID: 4003474986946242431}
   - component: {fileID: 5447343116441462728}
+  - component: {fileID: 1555395860172209687}
   m_Layer: 0
   m_Name: PlayerObject
   m_TagString: Untagged
@@ -70,3 +71,21 @@ MonoBehaviour:
   _PlayerSteamID: 0
   _PlayerName: 
   _Ready: 0
+  _Team: 0
+--- !u!114 &1555395860172209687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3951610579278390761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2576730625b1632468cbcbfe5e721f88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Mirror.Components::Mirror.NetworkTeam
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  _teamId: None
+  forceShown: 1

@@ -22,6 +22,7 @@ public class CustomNetworkManager : NetworkManager
 
     public void StartGame(string _sceneName)
     {
+        TeamManager.Instance.AutoBalanceTeams();
         ServerChangeScene(_sceneName);
     }
 
@@ -73,23 +74,39 @@ public class CustomNetworkManager : NetworkManager
         SpawnGameplayPlayer(conn, lobbyPlayer);
     }
 
-    /// <summary>
-    /// Spawns the gameplay player at a start position and copies lobby data onto it.
-    /// </summary>
+
     private void SpawnGameplayPlayer(NetworkConnectionToClient conn, PlayerObjectController lobbyPlayer)
     {
-        Transform startPos = GetStartPosition();
+        Transform startPos = GetTeamStartPosition(lobbyPlayer._Team);
         Vector3 position = startPos != null ? startPos.position : Vector3.zero;
         Quaternion rotation = startPos != null ? startPos.rotation : Quaternion.identity;
 
         PlayerGameController gamePlayer = Instantiate(_GameplayPlayerPrefab, position, rotation);
 
-        // Set before replacing so the SyncVars are included in the spawn message
         gamePlayer._ConnectionID = lobbyPlayer._ConnectionID;
         gamePlayer._PlayerIdNumber = lobbyPlayer._PlayerIdNumber;
         gamePlayer._PlayerSteamID = lobbyPlayer._PlayerSteamID;
         gamePlayer._PlayerName = lobbyPlayer._PlayerName;
+        gamePlayer._Team = lobbyPlayer._Team;
+
+        // Sync NetworkTeam so interest management works on the game player too
+        NetworkTeam networkTeam = gamePlayer.GetComponent<NetworkTeam>();
+        if (networkTeam != null)
+        {
+            networkTeam.teamId = lobbyPlayer._Team.ToString();
+        }
 
         NetworkServer.ReplacePlayerForConnection(conn, gamePlayer.gameObject, ReplacePlayerOptions.Destroy);
+    }
+
+    private Transform GetTeamStartPosition(Team team)
+    {
+        string tag = team == Team.Red ? "SpawnRed" : "SpawnBlue";
+        GameObject[] points = GameObject.FindGameObjectsWithTag(tag);
+        if (points.Length > 0)
+        {
+            return points[Random.Range(0, points.Length)].transform;
+        }
+        return GetStartPosition();
     }
 }

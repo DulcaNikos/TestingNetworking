@@ -28,7 +28,6 @@ namespace SteamLobbyN
             }
         }
 
-
         //Color
         public override void OnStartServer()
         {

@@ -173,7 +173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6344926491567050063, guid: 466a1e18168f19c48aa74c055f1076b4, type: 3}
       propertyPath: m_Name
-      value: R
+      value: Red team sphere
       objectReference: {fileID: 0}
     - target: {fileID: 7245026053452628845, guid: 466a1e18168f19c48aa74c055f1076b4, type: 3}
       propertyPath: sceneId
@@ -238,7 +238,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6344926491567050063, guid: 466a1e18168f19c48aa74c055f1076b4, type: 3}
       propertyPath: m_Name
-      value: Sphere (3)
+      value: Blue team sphere
       objectReference: {fileID: 0}
     - target: {fileID: 7245026053452628845, guid: 466a1e18168f19c48aa74c055f1076b4, type: 3}
       propertyPath: sceneId
@@ -261,12 +261,12 @@ GameObject:
   - component: {fileID: 345763975}
   - component: {fileID: 345763974}
   m_Layer: 0
-  m_Name: RuntimeCubeFactory
+  m_Name: Cube Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &345763974
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,12 +300,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   _CubePrefab: {fileID: 2908540259006838717, guid: 4911425f7f3dd9348ba724e7c5acabab, type: 3}
-  _CubeReference:
-    m_AssetGUID: 4911425f7f3dd9348ba724e7c5acabab
-    m_SubObjectName: 
-    m_SubObjectType: 
-    m_SubObjectGUID: 
-    m_EditorAssetChanged: 0
   _HostOnly: 0
   _SpawnDistance: 2
   _SpawnHeight: 0.5
@@ -335,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 635042783}
   m_Layer: 0
-  m_Name: SpawnRed
+  m_Name: Spawn point Red team
   m_TagString: SpawnRed
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -630,7 +624,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1690050293}
   m_Layer: 0
-  m_Name: SpawnBlue
+  m_Name: Spawn point Blue team
   m_TagString: SpawnBlue
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -886,7 +880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6344926491567050063, guid: 466a1e18168f19c48aa74c055f1076b4, type: 3}
       propertyPath: m_Name
-      value: Sphere (2)
+      value: Blue team sphere
       objectReference: {fileID: 0}
     - target: {fileID: 7245026053452628845, guid: 466a1e18168f19c48aa74c055f1076b4, type: 3}
       propertyPath: sceneId

@@ -27,8 +27,15 @@ public class TeamPickup : NetworkBehaviour
 
     public override void OnStartClient()
     {
-        UpdateVisual(_Active);
+        GetComponent<Collider>().enabled = _Active;
+
+        // Renderer only shows for the matching team
+        if (_Renderer != null)
+        {
+            _Renderer.enabled = _Active && LocalPlayerMatchesTeam();
+        }
     }
+
 
     [ServerCallback]
     private void OnTriggerEnter(Collider other)
@@ -44,20 +51,39 @@ public class TeamPickup : NetworkBehaviour
         Invoke(nameof(Respawn), _RespawnTime);
     }
 
+
     [Server]
     private void Respawn()
     {
         _Active = true;
     }
 
+
     private void OnActiveChanged(bool _, bool newVal)
     {
-        UpdateVisual(newVal);
+        // Always re-enable/disable the collider regardless of team
+        // The server needs this for OnTriggerEnter to fire
+        GetComponent<Collider>().enabled = newVal;
+
+        // Only show the renderer for the matching team
+        if (_Renderer != null)
+        {
+            _Renderer.enabled = newVal && LocalPlayerMatchesTeam();
+        }
     }
 
-    private void UpdateVisual(bool active)
+    private bool LocalPlayerMatchesTeam()
     {
-        if (_Renderer != null) _Renderer.enabled = active;
-        GetComponent<Collider>().enabled = active;
+        if (!isClient) return true;
+
+        PlayerGameController[] players = FindObjectsByType<PlayerGameController>(FindObjectsSortMode.None);
+        foreach (PlayerGameController player in players)
+        {
+            if (player.isLocalPlayer)
+            {
+                return player._Team == _Team;
+            }
+        }
+        return true;
     }
 }

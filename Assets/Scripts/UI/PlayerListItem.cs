@@ -78,7 +78,7 @@ public class PlayerListItem : MonoBehaviour
         return texture;
     }
 
-    public void ChangeReadyStatus()
+    private void ChangeReadyStatus()
     {
         if (_Ready)
         {

@@ -12,9 +12,6 @@ public class CubeMover : NetworkBehaviour
     [SerializeField, Tooltip("Movement speed in units per second.")]
     private float _MoveSpeed = 5f;
 
-    [SerializeField, Tooltip("Rotation speed in degrees per second.")]
-    private float _RotateSpeed = 90f;
-
     private Rigidbody _Rigidbody;
 
     private void Awake()
@@ -57,20 +54,8 @@ public class CubeMover : NetworkBehaviour
 
         if (input.sqrMagnitude > 0f)
         {
-            Vector3 move = new Vector3(input.x, 0f, input.y).normalized
-                           * _MoveSpeed * Time.fixedDeltaTime;
+            Vector3 move = new Vector3(input.x, 0f, input.y).normalized * _MoveSpeed * Time.fixedDeltaTime;
             _Rigidbody.MovePosition(_Rigidbody.position + move);
         }
-
-        // // Q / E to rotate
-        // float rotate = 0f;
-        // if (kb.qKey.isPressed) rotate = -1f;
-        // if (kb.eKey.isPressed) rotate = 1f;
-
-        // if (rotate != 0f)
-        // {
-        //     Quaternion delta = Quaternion.Euler(0f, rotate * _RotateSpeed * Time.fixedDeltaTime, 0f);
-        //     _Rigidbody.MoveRotation(_Rigidbody.rotation * delta);
-        // }
     }
 }

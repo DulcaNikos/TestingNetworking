@@ -20,7 +20,10 @@ public class TeamManager : NetworkBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(this); return; }
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this); return;
+        }
         Instance = this;
     }
 

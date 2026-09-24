@@ -13,26 +13,23 @@ public class LobbyController : MonoBehaviour
     //UI Elements
     [SerializeField, Tooltip("")]
     private TextMeshProUGUI _LobbyNameText;
-
     //Player Data
     [SerializeField, Tooltip("")]
     private GameObject _PlayerListViewContent;
     [SerializeField, Tooltip("")]
     private GameObject _PlayerListItemPrefab;
-    [SerializeField, Tooltip("")]
-    private GameObject _LocalPlayerObject;
-
-    //Other Data
-    public ulong _CurrentLobbyID;
-    public bool _PlayerItemCreated = false;
-    private List<PlayerListItem> _PlayerListItems = new List<PlayerListItem>();
-    public PlayerObjectController _LocalPlayerController;
-
     //Ready
     [SerializeField, Tooltip("")]
     private Button _StartGameButton;
     [SerializeField, Tooltip("")]
     private TextMeshProUGUI _ReadyButtonText;
+
+    //Other Data
+    private ulong _CurrentLobbyID;
+    private bool _PlayerItemCreated = false;
+    private List<PlayerListItem> _PlayerListItems = new List<PlayerListItem>();
+    private GameObject _LocalPlayerObject;
+    private PlayerObjectController _LocalPlayerController;
 
     //Manager
     private CustomNetworkManager _Manager;
@@ -98,7 +95,7 @@ public class LobbyController : MonoBehaviour
         _LocalPlayerController = _LocalPlayerObject.GetComponent<PlayerObjectController>();
     }
 
-    public void CreateHostPlayerItem()
+    private void CreateHostPlayerItem()
     {
         foreach (PlayerObjectController player in Manager._GamePlayers)
         {
@@ -119,7 +116,7 @@ public class LobbyController : MonoBehaviour
         _PlayerItemCreated = true;
     }
 
-    public void CreateClientPlayerItem()
+    private void CreateClientPlayerItem()
     {
         foreach (PlayerObjectController player in Manager._GamePlayers)
         {
@@ -142,7 +139,7 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    public void UpdatePlayerItem()
+    private void UpdatePlayerItem()
     {
         foreach (PlayerObjectController player in Manager._GamePlayers)
         {
@@ -163,7 +160,7 @@ public class LobbyController : MonoBehaviour
         CheckIfAllReady();
     }
 
-    public void RemovePlayerItem()
+    private void RemovePlayerItem()
     {
         List<PlayerListItem> playerListItemToRemove = new List<PlayerListItem>();
 
@@ -187,12 +184,7 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    public void ReadyPlayer()
-    {
-        _LocalPlayerController.ChangeReady();
-    }
-
-    public void UpdateButton()
+    private void UpdateButton()
     {
         if (_LocalPlayerController._Ready)
         {
@@ -205,7 +197,7 @@ public class LobbyController : MonoBehaviour
         }
     }
 
-    public void CheckIfAllReady()
+    private void CheckIfAllReady()
     {
         bool allReady = false;
 
@@ -240,8 +232,17 @@ public class LobbyController : MonoBehaviour
         }
     }
 
+    #region Called from buttons
+
+    public void ReadyPlayer()
+    {
+        _LocalPlayerController.ChangeReady();
+    }
+
+
     public void StartGame(string _sceneName)
     {
         _LocalPlayerController.CanStartGame(_sceneName);
     }
+    #endregion
 }

@@ -126,6 +126,7 @@ public class PlayerObjectController : NetworkBehaviour
     {
         CmdRequestTeam(Team.Red);
     }
+
     public void RequestBlueTeam()
     {
         CmdRequestTeam(Team.Blue);

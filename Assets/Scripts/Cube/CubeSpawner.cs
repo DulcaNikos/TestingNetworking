@@ -13,9 +13,6 @@ public class CubeSpawner : NetworkBehaviour
     [SerializeField, Tooltip("Must be in Registered Spawnable Prefabs.")]
     private GameObject _CubePrefab;
 
-    [SerializeField, Tooltip("Addressable cube prefab. Must also be listed in AddressableSpawnRegistry.")]
-    private AssetReferenceGameObject _CubeReference;
-
     [SerializeField, Tooltip("If true, only the host can spawn cubes.")]
     private bool _HostOnly = false;
 
@@ -58,13 +55,6 @@ public class CubeSpawner : NetworkBehaviour
         if (_NextSpawnTimes.TryGetValue(sender.connectionId, out float nextTime) && now < nextTime) return;
         _NextSpawnTimes[sender.connectionId] = now + _SpawnCooldown;
 
-        GameObject prefab = AddressableSpawnRegistry.Instance.GetPrefab(_CubeReference);
-        if (prefab == null)
-        {
-            Debug.LogError("Cube prefab not loaded. Is it listed in AddressableSpawnRegistry?");
-            return;
-        }
-
         // Spawn in front of the sender's player, or at the spawner if they have none
         Transform origin = sender.identity != null ? sender.identity.transform : transform;
 
@@ -79,9 +69,7 @@ public class CubeSpawner : NetworkBehaviour
         Vector3 position = origin.position + forward * _SpawnDistance;
         position.y = _SpawnHeight;
 
-        // GameObject cube = Instantiate(_CubePrefab, position, Quaternion.LookRotation(forward, Vector3.up));
-
-        GameObject cube = Instantiate(prefab, position, Quaternion.LookRotation(forward, Vector3.up));
+        GameObject cube = Instantiate(_CubePrefab, position, Quaternion.LookRotation(forward, Vector3.up));
         NetworkServer.Spawn(cube);
     }
 }

@@ -23,22 +23,19 @@ public class CustomNetworkManager : NetworkManager
     public void StartGame(string _sceneName)
     {
         TeamManager.Instance.AutoBalanceTeams();
+
         ServerChangeScene(_sceneName);
     }
 
-    public override void OnStartClient()
-    {
-        base.OnStartClient();
-        //RuntimeCubeFactory.RegisterClientHandler();
-        AddressableSpawnRegistry.Instance.RegisterWithClient();
-    }
-
-    public override void OnStopClient()
-    {
-        base.OnStopClient();
-        //RuntimeCubeFactory.UnregisterClientHandler();
-        AddressableSpawnRegistry.Instance.UnregisterFromClient();
-    }
+    // public override void OnStartServer()
+    // {
+    //     base.OnStartServer();
+    //     GameObject tm = new GameObject("TeamManager");
+    //     tm.AddComponent<NetworkIdentity>();
+    //     tm.AddComponent<TeamManager>();
+    //     DontDestroyOnLoad(tm);
+    //     NetworkServer.Spawn(tm);
+    // }
 
     //Spawn lobby player
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)

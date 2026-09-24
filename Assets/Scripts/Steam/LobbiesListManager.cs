@@ -1,7 +1,6 @@
 using UnityEngine;
 using Steamworks;
 using System.Collections.Generic;
-using Edgegap;
 
 public class LobbiesListManager : MonoBehaviour
 {
@@ -34,7 +33,6 @@ public class LobbiesListManager : MonoBehaviour
     {
         _LobbiesButton.SetActive(false);
         _HostButton.SetActive(false);
-
         _LobbiesMenu.SetActive(true);
 
         SteamLobby.Instance.GetLobbiesList();
@@ -50,11 +48,9 @@ public class LobbiesListManager : MonoBehaviour
             {
                 createdItem = Instantiate(_LobbyDataItemPrefab);
                 lobbyDataEntry = createdItem.GetComponent<LobbyDataEntry>();
-
                 lobbyDataEntry._LobbyID = (CSteamID)_lobbyIDs[i].m_SteamID;
                 lobbyDataEntry._LobbyName = SteamMatchmaking.GetLobbyData((CSteamID)_lobbyIDs[i].m_SteamID, "name");
                 lobbyDataEntry.SetLobbydata();
-
                 lobbyDataEntry.transform.SetParent(_LobbyListContent.transform);
                 lobbyDataEntry.transform.localScale = Vector3.one;
 

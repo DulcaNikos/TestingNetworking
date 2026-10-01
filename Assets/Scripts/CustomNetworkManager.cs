@@ -20,6 +20,7 @@ public class CustomNetworkManager : NetworkManager
 
     public List<PlayerObjectController> _GamePlayers { get; } = new List<PlayerObjectController>();
 
+    // Triggers team balance and scene change
     public void StartGame(string _sceneName)
     {
         TeamManager.Instance.AutoBalanceTeams();
@@ -27,17 +28,7 @@ public class CustomNetworkManager : NetworkManager
         ServerChangeScene(_sceneName);
     }
 
-    // public override void OnStartServer()
-    // {
-    //     base.OnStartServer();
-    //     GameObject tm = new GameObject("TeamManager");
-    //     tm.AddComponent<NetworkIdentity>();
-    //     tm.AddComponent<TeamManager>();
-    //     DontDestroyOnLoad(tm);
-    //     NetworkServer.Spawn(tm);
-    // }
-
-    //Spawn lobby player
+    // Spawns the lobby player when a client connects
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
     {
         if (SceneManager.GetActiveScene().name == _LobbySceneName)
@@ -46,18 +37,13 @@ public class CustomNetworkManager : NetworkManager
 
             GamePlayerInstance._ConnectionID = conn.connectionId;
             GamePlayerInstance._PlayerIdNumber = _GamePlayers.Count + 1;
-            GamePlayerInstance._PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobby.Instance.CurrentLobbyID, _GamePlayers.Count);
+            GamePlayerInstance._PlayerSteamID = (ulong)SteamMatchmaking.GetLobbyMemberByIndex((CSteamID)SteamLobbyHost.Instance.CurrentLobbyID, _GamePlayers.Count);
 
             NetworkServer.AddPlayerForConnection(conn, GamePlayerInstance.gameObject);
         }
     }
 
-    // Spawn gameplay player
-
-    /// <summary>
-    /// Called on the server when a client has finished loading a scene.
-    /// In the gameplay scene, replaces the lobby player with the gameplay player.
-    /// </summary>
+    // Replaces lobby player with game player after scene load
     public override void OnServerReady(NetworkConnectionToClient conn)
     {
         base.OnServerReady(conn);
@@ -71,7 +57,7 @@ public class CustomNetworkManager : NetworkManager
         SpawnGameplayPlayer(conn, lobbyPlayer);
     }
 
-
+    // Instantiates and configures the game player
     private void SpawnGameplayPlayer(NetworkConnectionToClient conn, PlayerObjectController lobbyPlayer)
     {
         Transform startPos = GetTeamStartPosition(lobbyPlayer._Team);

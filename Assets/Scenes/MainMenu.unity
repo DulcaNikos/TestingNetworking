@@ -311,9 +311,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1244964655}
-        m_TargetAssemblyTypeName: LobbiesListManager, Assembly-CSharp
-        m_MethodName: GetListOfLobbies
+      - m_Target: {fileID: 1578252287}
+        m_TargetAssemblyTypeName: GameModeManager, Assembly-CSharp
+        m_MethodName: OnBrowsePressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1108,9 +1108,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1578252284}
-        m_TargetAssemblyTypeName: SteamLobby, Assembly-CSharp
-        m_MethodName: HostLobby
+      - m_Target: {fileID: 1578252287}
+        m_TargetAssemblyTypeName: GameModeManager, Assembly-CSharp
+        m_MethodName: OnHostPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2020,8 +2020,10 @@ GameObject:
   - component: {fileID: 1578252280}
   - component: {fileID: 1578252281}
   - component: {fileID: 1578252278}
-  - component: {fileID: 1578252284}
   - component: {fileID: 1578252286}
+  - component: {fileID: 1578252284}
+  - component: {fileID: 1578252288}
+  - component: {fileID: 1578252287}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -2137,6 +2139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959a8cb00509ba24abe90826925b1445, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SteamLobby
+  _LobbyType: 0
 --- !u!114 &1578252286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2149,6 +2152,48 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dceb9a7085758fd4590419ff5b14b636, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Mirror.Components::Mirror.TeamInterestManagement
+--- !u!114 &1578252287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578252277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289ba3a1a45cb6b40b65d0eb90e1cd6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameModeManager
+  _SteamManager: {fileID: 1578252280}
+  _FizzySteamworks: {fileID: 1578252281}
+  _CustomNetworkManager: {fileID: 1578252278}
+  _TeamInterestManagement: {fileID: 1578252286}
+  _SteamLobbyHost: {fileID: 1578252284}
+  _SteamLobbyClient: {fileID: 1578252288}
+  _LobbiesListManager: {fileID: 1244964655}
+  _MainMenuUI: {fileID: 1246152133}
+  _LobbyBrowserUI: {fileID: 1062355510}
+  _SteamManagerForHost: 1
+  _SteamManagerForClient: 1
+  _FizzyForHost: 1
+  _FizzyForClient: 1
+  _NetworkManagerForHost: 1
+  _NetworkManagerForClient: 1
+  _TeamInterestForHost: 1
+  _TeamInterestForClient: 0
+--- !u!114 &1578252288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578252277}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 235f217f7ef4449408daf79434ff7262, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SteamLobbyClient
+  _RefreshInterval: 10
 --- !u!1 &1788077333
 GameObject:
   m_ObjectHideFlags: 0

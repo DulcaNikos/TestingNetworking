@@ -29,15 +29,6 @@ public class LobbiesListManager : MonoBehaviour
         }
     }
 
-    public void GetListOfLobbies()
-    {
-        _LobbiesButton.SetActive(false);
-        _HostButton.SetActive(false);
-        _LobbiesMenu.SetActive(true);
-
-        SteamLobby.Instance.GetLobbiesList();
-    }
-
     public void DisplayLobbies(List<CSteamID> _lobbyIDs, LobbyDataUpdate_t _result)
     {
         GameObject createdItem;
@@ -68,5 +59,13 @@ public class LobbiesListManager : MonoBehaviour
         _ListOfLobbies.Clear();
     }
 
-
+    /// <summary>
+    /// Hides the browse menu immediately when the player clicks Join.
+    /// </summary>
+    public void HideMenu()
+    {
+        _LobbiesMenu.SetActive(false);
+        _LobbiesButton.SetActive(true);
+        _HostButton.SetActive(true);
+    }
 }

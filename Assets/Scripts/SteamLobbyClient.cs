@@ -11,17 +11,23 @@ public class SteamLobbyClient : MonoBehaviour
 {
     public static SteamLobbyClient Instance { get; private set; }
 
-    private const string HostAddressKey = "HostAddress";
-    private CustomNetworkManager _NetworkManager;
-    private List<CSteamID> _LobbyIDs = new List<CSteamID>();
-    private bool _JoiningLobby;
-
     [SerializeField, Tooltip("Seconds between auto-refreshes while the lobby list is open.")]
     private float _RefreshInterval = 10f;
+
+    private const string HostAddressKey = "HostAddress";
+    private CustomNetworkManager _NetworkManager;
+    private bool _JoiningLobby;
 
     private bool _ListOpen;
     private Coroutine _RefreshCoroutine;
 
+    private const string PasswordKey = "password";
+
+
+    private ulong _CurrentLobbyID;
+    public ulong CurrentLobbyID => _CurrentLobbyID;
+
+    private List<CSteamID> _LobbyIDs = new List<CSteamID>();
     public List<CSteamID> LobbyIDs => _LobbyIDs;
 
     protected Callback<LobbyEnter_t> _LobbyEntered;
@@ -132,6 +138,7 @@ public class SteamLobbyClient : MonoBehaviour
 
     private void OnLobbyEntered(LobbyEnter_t callback)
     {
+        _CurrentLobbyID = callback.m_ulSteamIDLobby;
         _JoiningLobby = false;
 
         if (NetworkServer.active) return;
@@ -167,4 +174,24 @@ public class SteamLobbyClient : MonoBehaviour
         LobbiesListManager.Instance.DisplayLobbies(_LobbyIDs, result);
     }
     #endregion
+
+    /// <summary>
+    /// Called from the lobby list entry button.
+    /// Checks if the lobby has a password before joining.
+    /// </summary>
+    public void TryJoinLobby(CSteamID lobbyID)
+    {
+        string password = SteamMatchmaking.GetLobbyData(lobbyID, PasswordKey);
+
+        if (string.IsNullOrEmpty(password))
+        {
+            // Public room — join directly
+            JoinLobby(lobbyID);
+        }
+        else
+        {
+            // Private room — show password popup
+            PasswordPopupUI.Instance.Show(lobbyID, password);
+        }
+    }
 }

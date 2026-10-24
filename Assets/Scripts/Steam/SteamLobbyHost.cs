@@ -11,6 +11,8 @@ public class SteamLobbyHost : MonoBehaviour
 
     [SerializeField, Tooltip("Lobby visibility set in Inspector.")]
     private ELobbyType _LobbyType = ELobbyType.k_ELobbyTypePublic;
+    [SerializeField, Tooltip("Leave empty for public room.")]
+    private string _Password = "abcd";
 
     private const string HostAddressKey = "HostAddress";
     private CustomNetworkManager _NetworkManager;
@@ -62,9 +64,14 @@ public class SteamLobbyHost : MonoBehaviour
         SteamMatchmaking.SetLobbyJoinable(lobbyId, true);
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
         SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name", SteamFriends.GetPersonaName() + "'S LOBBY");
+        SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "password", _Password);
+
+        //Testing lobby code
+        string code = LobbyCodeHelper.ToCode(callback.m_ulSteamIDLobby);
+        Debug.Log("Lobby code: " + code);
 
         // Lets Steam know how friends can join you (shows "Join Game" / enables invites)
-        SteamFriends.SetRichPresence("connect", "+connect_lobby " + callback.m_ulSteamIDLobby);
+        // SteamFriends.SetRichPresence("connect", "+connect_lobby " + callback.m_ulSteamIDLobby);
 
         _NetworkManager.StartHost();
     }
